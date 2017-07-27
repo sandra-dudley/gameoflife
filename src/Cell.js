@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import Style from './Cell.css';
 
 class Cell extends Component {
   constructor (props) {
     super(props)
-    this.state = {
+    this.state={
       width: 30,
       height: 30
     }
@@ -15,7 +16,7 @@ class Cell extends Component {
       border: '1px solid #000'
     }
     return (
-      <td style = {cellStyle}></td>
+      <td style={cellStyle} className={this.props.status}></td>
     );
   }
 }
