@@ -13,7 +13,7 @@ class Cell extends Component {
     let cellStyle = {
       height: this.state.height+"px", 
       width: this.state.width+"px",
-      border: '1px solid #000'
+      border: '1px solid #000',
     }
     return (
       <td style={cellStyle} className={this.props.status}></td>

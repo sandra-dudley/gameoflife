@@ -9,10 +9,15 @@ class App extends Component {
       height: 10,
       gridStatus: []
     }
+    this.regenerateGrid = this.regenerateGrid.bind(this)
   }
   
   componentDidMount() {
     this.startGame();
+    this.newGeneration = setInterval(this.regenerateGrid, 3000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.newGeneration);
   }
   /*
   * Generate random life status matrix and renders grid
@@ -35,6 +40,62 @@ class App extends Component {
       this.renderGrid();
     }
   }
+  
+  regenerateGrid() {
+    //let prevGrid = this.state.gridStatus;
+    //let newGrid = [];
+    let rows = [];
+    for (let y = 0; y < this.state.height; y ++) {
+      let row = [];
+      for (let x = 0; x < this.state.width; x ++) {
+        
+        let topLeft = (y > 0 && x > 0) ? ( (this.state.gridStatus[y-1][x-1]==="alive")? 1 : 0 )  : 0;
+        let top = (y > 0) ? ( (this.state.gridStatus[y-1][x]==="alive")? 1 : 0 )  : 0;
+        let topRight = (y > 0 && x < this.state.width) ? ( (this.state.gridStatus[y-1][x+1]==="alive")? 1 : 0 )  : 0;
+        let left = (x > 0) ? ( (this.state.gridStatus[y][x-1]==="alive")? 1 : 0 )  : 0;
+        let right = ( x < this.state.width) ? ( (this.state.gridStatus[y][x+1]==="alive")? 1 : 0 )  : 0;
+        let bottomLeft = (y < this.state.height -1 && x > 0) ? ( (this.state.gridStatus[y+1][x-1]==="alive")? 1 : 0 )  : 0;
+        let bottom = (y < this.state.height - 1) ? ( (this.state.gridStatus[y+1][x]==="alive")? 1 : 0 )  : 0;
+        let bottomRight = (y < this.state.height - 1 && x < this.state.width) ? ( (this.state.gridStatus[y+1][x+1]==="alive")? 1 : 0 )  : 0;
+        
+        let current = this.state.gridStatus[y][x];
+        let neighbours = topLeft + top + topRight + left + right + bottomLeft + bottom + bottomRight;
+
+        
+        if (current === "alive") {
+          if (neighbours < 2 || neighbours > 3) {
+            current = "dead";
+          }
+        } else {
+          if (neighbours === 3) {
+            current = "alive";
+          }
+        }
+
+       row.push(current)
+
+      }
+      rows.push(row);
+      
+    }
+    console.log(this.state.gridStatus[0][0], rows[0][0])
+    this.setState({gridStatus: rows})
+  }
+  
+  checkStatus (current, neighbours) {
+    let newStatus = current;
+    if (current === "alive") {
+      if (neighbours < 2 || neighbours > 3) {
+        newStatus = "dead";
+      }
+    } else {
+      if (neighbours === 3) {
+        newStatus = "alive";
+      }
+    }
+    return newStatus;
+  }
+  
   
   renderGrid () {
     let rows = [];
