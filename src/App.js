@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import Cell from './Cell';
 
 class App extends Component {
@@ -9,17 +9,31 @@ class App extends Component {
       width:10,
       height: 10,
       gridStatus: [],
+      speed: 2000
     }
-    this.regenerateGrid = this.regenerateGrid.bind(this)
+    this.regenerateGrid = this.regenerateGrid.bind(this);
+    this.changeSpeed = this.changeSpeed.bind(this);
   }
   
   componentDidMount() {
     this.startGame();
-    this.newGeneration = setInterval(this.regenerateGrid, 3000);
+    this.newGeneration = setInterval(this.regenerateGrid, this.state.speed);
   }
   componentWillUnmount() {
     clearInterval(this.newGeneration);
   }
+  
+  componentDidUpdate(prevProps,prevState) {
+    if (prevState.gridStatus !== this.state.gridStatus) {
+      this.renderGrid();
+    }
+    if (prevState.speed !== this.state.speed) {
+      clearInterval(this.newGeneration);
+      this.newGeneration = setInterval(this.regenerateGrid, this.state.speed);
+    }
+  }
+  
+  
   /*
   * Generate random life status matrix and renders grid
   */
@@ -36,11 +50,7 @@ class App extends Component {
     this.setState({gridStatus: rows});
   }
   
-  componentDidUpdate(prevProps,prevState) {
-    if (prevState.gridStatus !== this.state.gridStatus) {
-      this.renderGrid();
-    }
-  }
+  
   
   regenerateGrid() {
     //let prevGrid = this.state.gridStatus;
@@ -113,6 +123,10 @@ class App extends Component {
     this.setState({grid: rows});
   }
   
+  changeSpeed (event) {
+    console.log(event.target.dataset.speed)
+    this.setState({speed: event.target.dataset.speed})
+  }
   render() {
     return (
       <div>
@@ -121,7 +135,11 @@ class App extends Component {
             {this.state.grid}
           </tbody>
         </table>
-        <Button>Value</Button>   <Button bsStyle="primary">Primary</Button>
+        <ButtonGroup>
+          <Button active={this.state.speed === 3000 ? true : false} data-speed={3000} onClick={this.state.speed === 3000 ? null : this.changeSpeed}>Slow</Button>
+          <Button active={this.state.speed === 2000 ? true : false} data-speed={2000} onClick={this.state.speed === 2000 ? null : this.changeSpeed}>Medium</Button>
+          <Button active={this.state.speed === 1000 ? true : false} data-speed={1000} onClick={this.state.speed === 1000 ? null : this.changeSpeed}>Fast</Button>
+        </ButtonGroup>
       </div>
     );
   }
