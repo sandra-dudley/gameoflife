@@ -13,6 +13,7 @@ class App extends Component {
     }
     this.regenerateGrid = this.regenerateGrid.bind(this);
     this.changeSpeed = this.changeSpeed.bind(this);
+    this.pauseGame = this.pauseGame.bind(this);
   }
   
   componentDidMount() {
@@ -30,6 +31,9 @@ class App extends Component {
     if (prevState.speed !== this.state.speed) {
       clearInterval(this.newGeneration);
       this.newGeneration = setInterval(this.regenerateGrid, this.state.speed);
+    }
+    if (prevState.pause !== this.state.pause) {
+      this.state.pause ? clearInterval(this.newGeneration) : this.newGeneration = setInterval(this.regenerateGrid, this.state.speed);
     }
   }
   
@@ -127,6 +131,9 @@ class App extends Component {
     console.log(event.target.dataset.speed)
     this.setState({speed: event.target.dataset.speed})
   }
+  pauseGame() {
+    this.setState({pause: !this.state.pause});
+  }
   render() {
     return (
       <div>
@@ -140,6 +147,7 @@ class App extends Component {
           <Button active={this.state.speed === 2000 ? true : false} data-speed={2000} onClick={this.state.speed === 2000 ? null : this.changeSpeed}>Medium</Button>
           <Button active={this.state.speed === 1000 ? true : false} data-speed={1000} onClick={this.state.speed === 1000 ? null : this.changeSpeed}>Fast</Button>
         </ButtonGroup>
+        <Button active={this.state.pause} onClick={this.pauseGame}>Pause</Button>
       </div>
     );
   }
