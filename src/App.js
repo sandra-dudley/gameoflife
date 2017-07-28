@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import Cell from './Cell';
 
 class App extends Component {
@@ -7,7 +8,7 @@ class App extends Component {
     this.state={
       width:10,
       height: 10,
-      gridStatus: []
+      gridStatus: [],
     }
     this.regenerateGrid = this.regenerateGrid.bind(this)
   }
@@ -114,11 +115,14 @@ class App extends Component {
   
   render() {
     return (
-      <table>
-        <tbody>
-          {this.state.grid}
-        </tbody>
-      </table>
+      <div>
+        <table>
+          <tbody>
+            {this.state.grid}
+          </tbody>
+        </table>
+        <Button>Value</Button>   <Button bsStyle="primary">Primary</Button>
+      </div>
     );
   }
 }
