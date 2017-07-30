@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import Cell from './Cell';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state={
-      width:10,
+      width:30,
       height: 10,
       gridStatus: [],
-      speed: 2000
+      speed: 2000,
+      slow: 3000,
+      medium: 2000,
+      fast:1000,
+      pause: false
     }
     this.regenerateGrid = this.regenerateGrid.bind(this);
     this.changeSpeed = this.changeSpeed.bind(this);
     this.pauseGame = this.pauseGame.bind(this);
+    this.restartGame = this.restartGame.bind(this);
+    this.clearBoard = this.clearBoard.bind(this);
+
   }
   
   componentDidMount() {
@@ -52,6 +59,7 @@ class App extends Component {
       rows.push(row);
     }
     this.setState({gridStatus: rows});
+    
   }
   
   
@@ -93,7 +101,6 @@ class App extends Component {
       rows.push(row);
       
     }
-    console.log(this.state.gridStatus[0][0], rows[0][0])
     this.setState({gridStatus: rows})
   }
   
@@ -128,26 +135,60 @@ class App extends Component {
   }
   
   changeSpeed (event) {
-    console.log(event.target.dataset.speed)
+    console.log(event.target.dataset.speed, typeof event.target.dataset.speed)
     this.setState({speed: event.target.dataset.speed})
   }
   pauseGame() {
     this.setState({pause: !this.state.pause});
   }
+  restartGame () {
+    this.startGame();
+    this.setState({speed: this.state.medium, pause: false});
+  }
+  clearBoard () {
+    let rows = [];
+    for (let y = 0; y < this.state.height; y ++) {
+      let row = [];
+      for (let x = 0; x < this.state.width; x ++) {
+        let rand = Math.random();
+        row.push("dead");
+      }
+      rows.push(row);
+    }
+    this.setState({gridStatus: rows});
+    clearInterval(this.newGeneration);
+  }
   render() {
     return (
-      <div>
-        <table>
-          <tbody>
-            {this.state.grid}
-          </tbody>
-        </table>
-        <ButtonGroup>
-          <Button active={this.state.speed === 3000 ? true : false} data-speed={3000} onClick={this.state.speed === 3000 ? null : this.changeSpeed}>Slow</Button>
-          <Button active={this.state.speed === 2000 ? true : false} data-speed={2000} onClick={this.state.speed === 2000 ? null : this.changeSpeed}>Medium</Button>
-          <Button active={this.state.speed === 1000 ? true : false} data-speed={1000} onClick={this.state.speed === 1000 ? null : this.changeSpeed}>Fast</Button>
-        </ButtonGroup>
-        <Button active={this.state.pause} onClick={this.pauseGame}>Pause</Button>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-12">
+            <h1>Game of life</h1>
+            <table>
+              <tbody>
+                {this.state.grid}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+          <h3>Speed</h3>
+            <ButtonGroup>
+              <Button active={parseInt(this.state.speed) === this.state.slow ? true : false} data-speed={this.state.slow} onClick={parseInt(this.state.slow) === this.state.medium ? null : this.changeSpeed}>Slow</Button>
+              <Button active={parseInt(this.state.speed) === this.state.medium ? true : false} data-speed={this.state.medium} onClick={parseInt(this.state.speed) === this.state.medium ? null : this.changeSpeed}>Medium</Button>
+              <Button active={parseInt(this.state.speed) === this.state.fast ? true : false} data-speed={this.state.fast} onClick={parseInt(this.state.speed) === this.state.fast ? null : this.changeSpeed}>Fast</Button>
+            </ButtonGroup>
+          </div>
+          <div className="col-md-6">
+            <h3>Board control</h3>
+            <ButtonToolbar>
+              <Button active={this.state.pause} onClick={this.pauseGame}>{this.state.pause? "Play" : "Pause"}</Button>
+              <Button onClick={this.restartGame}>Reset game</Button>
+              <Button onClick={this.clearBoard}>Clear Board</Button>
+            </ButtonToolbar>
+          </div>
+        </div>
       </div>
     );
   }
