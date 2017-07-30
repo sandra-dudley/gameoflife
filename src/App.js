@@ -175,7 +175,6 @@ class App extends Component {
       rows.push(row);
     }
     this.setState({gridStatus: rows});
-    clearInterval(this.newGeneration);
   }
   render() {
     return (
