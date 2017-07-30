@@ -35,10 +35,7 @@ class App extends Component {
   
   componentDidUpdate(prevProps,prevState) {
     if (prevState.gridStatus !== this.state.gridStatus) {
-      console.log("new grid");
       this.renderGrid();
-    } else {
-      console.log("grid is the same");
     }
     if (prevState.speed !== this.state.speed) {
       clearInterval(this.newGeneration);
@@ -133,7 +130,7 @@ class App extends Component {
       for (let x = 0; x < this.state.width; x ++) {
         row.push(
           <Cell key={'col'+y+'row'+x} col={y} row={x} updateGrid={this.updateGrid}
-          status = { Array.from(this.state.gridStatus)[y][x] }
+          status={ Array.from(this.state.gridStatus)[y][x] }
            />);
       }
       rows.push(<tr key={'col'+y}>{row}</tr>);
@@ -146,8 +143,8 @@ class App extends Component {
     let targetRow = event.target.dataset.row; 
     updatedCell = this.state.gridStatus[targetCol][targetRow] === "dead" ? "alive" : "dead";
     let newGrid = update(this.state.gridStatus, {
-      [parseInt(targetCol)] : {
-        [parseInt(targetRow)] : {
+      [targetCol] : {
+        [targetRow] : {
           $set: updatedCell
         }
       }
@@ -169,7 +166,6 @@ class App extends Component {
     for (let y = 0; y < this.state.height; y ++) {
       let row = [];
       for (let x = 0; x < this.state.width; x ++) {
-        let rand = Math.random();
         row.push("dead");
       }
       rows.push(row);
@@ -193,9 +189,9 @@ class App extends Component {
           <div className="col-md-6">
           <h3>Speed</h3>
             <ButtonGroup>
-              <Button active={parseInt(this.state.speed) === this.state.slow ? true : false} data-speed={this.state.slow} onClick={parseInt(this.state.slow) === this.state.medium ? null : this.changeSpeed}>Slow</Button>
-              <Button active={parseInt(this.state.speed) === this.state.medium ? true : false} data-speed={this.state.medium} onClick={parseInt(this.state.speed) === this.state.medium ? null : this.changeSpeed}>Medium</Button>
-              <Button active={parseInt(this.state.speed) === this.state.fast ? true : false} data-speed={this.state.fast} onClick={parseInt(this.state.speed) === this.state.fast ? null : this.changeSpeed}>Fast</Button>
+              <Button active={parseInt(this.state.speed, 10) === this.state.slow ? true : false} data-speed={this.state.slow} onClick={parseInt(this.state.slow, 10) === this.state.medium ? null : this.changeSpeed}>Slow</Button>
+              <Button active={parseInt(this.state.speed, 10) === this.state.medium ? true : false} data-speed={this.state.medium} onClick={parseInt(this.state.speed, 10) === this.state.medium ? null : this.changeSpeed}>Medium</Button>
+              <Button active={parseInt(this.state.speed, 10) === this.state.fast ? true : false} data-speed={this.state.fast} onClick={parseInt(this.state.speed, 10) === this.state.fast ? null : this.changeSpeed}>Fast</Button>
             </ButtonGroup>
           </div>
           <div className="col-md-6">
