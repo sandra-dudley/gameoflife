@@ -14,7 +14,8 @@ class App extends Component {
       slow: 3000,
       medium: 2000,
       fast:1000,
-      pause: false
+      pause: false,
+      generation: 0
     }
     this.regenerateGrid = this.regenerateGrid.bind(this);
     this.changeSpeed = this.changeSpeed.bind(this);
@@ -71,6 +72,8 @@ class App extends Component {
   regenerateGrid() {
     //let prevGrid = this.state.gridStatus;
     //let newGrid = [];
+    let newGeneration = this.state.generation + 1;
+    this.setState({generation: newGeneration});
     let rows = [];
     for (let y = 0; y < this.state.height; y ++) {
       let row = [];
@@ -159,7 +162,7 @@ class App extends Component {
   }
   restartGame () {
     this.startGame();
-    this.setState({speed: this.state.medium, pause: false});
+    this.setState({speed: this.state.medium, pause: false, generation: 0});
   }
   clearBoard () {
     let rows = [];
@@ -179,7 +182,7 @@ class App extends Component {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-12">
-            <h1>Game of life</h1>
+            <h1>Game of life. Generation: {this.state.generation}</h1>
             <table>
               <tbody>
                 {this.state.grid}
