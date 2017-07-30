@@ -16,7 +16,7 @@ class Cell extends Component {
       border: '1px solid #000',
     }
     return (
-      <td style={cellStyle} className={this.props.status}></td>
+      <td style={cellStyle} className={this.props.status} data-col={this.props.col} data-row={this.props.row} onClick={this.props.updateGrid} ></td>
     );
   }
 }

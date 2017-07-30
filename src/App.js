@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import update from 'immutability-helper';
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import Cell from './Cell';
 
@@ -20,7 +21,7 @@ class App extends Component {
     this.pauseGame = this.pauseGame.bind(this);
     this.restartGame = this.restartGame.bind(this);
     this.clearBoard = this.clearBoard.bind(this);
-
+    this.updateGrid = this.updateGrid.bind(this);
   }
   
   componentDidMount() {
@@ -33,7 +34,10 @@ class App extends Component {
   
   componentDidUpdate(prevProps,prevState) {
     if (prevState.gridStatus !== this.state.gridStatus) {
+      console.log("new grid");
       this.renderGrid();
+    } else {
+      console.log("grid is the same");
     }
     if (prevState.speed !== this.state.speed) {
       clearInterval(this.newGeneration);
@@ -125,7 +129,7 @@ class App extends Component {
       let row = [];
       for (let x = 0; x < this.state.width; x ++) {
         row.push(
-          <Cell key={'col'+y+'row'+x} 
+          <Cell key={'col'+y+'row'+x} col={y} row={x} updateGrid={this.updateGrid}
           status = { Array.from(this.state.gridStatus)[y][x] }
            />);
       }
@@ -133,9 +137,21 @@ class App extends Component {
     }
     this.setState({grid: rows});
   }
-  
+  updateGrid(event) {
+    let updatedCell='';
+    let targetCol = event.target.dataset.col;
+    let targetRow = event.target.dataset.row; 
+    updatedCell = this.state.gridStatus[targetCol][targetRow] === "dead" ? "alive" : "dead";
+    let newGrid = update(this.state.gridStatus, {
+      [parseInt(targetCol)] : {
+        [parseInt(targetRow)] : {
+          $set: updatedCell
+        }
+      }
+    })
+   this.setState({gridStatus: newGrid})
+  }
   changeSpeed (event) {
-    console.log(event.target.dataset.speed, typeof event.target.dataset.speed)
     this.setState({speed: event.target.dataset.speed})
   }
   pauseGame() {
