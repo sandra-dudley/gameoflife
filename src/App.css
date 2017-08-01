@@ -1,1 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Special+Elite');
 
+h1, h2, h3 {
+    font-family: 'Special Elite';
+}
+body {
+    background: #333;
+    color: #fff;
+}
+table td {
+    border-radius: 10px;
+}
+
+.btn.active {
+    background: #000;
+    color: #fff;
+}
+
+footer h3 {
+    display: inline-block;
+    margin-right: 10px;
+}
+footer .btn-toolbar {
+    display: inline-block;
+    vertical-align: middle;
+}

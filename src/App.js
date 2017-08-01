@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
+import './App.css';
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import Cell from './Cell';
 
@@ -7,8 +8,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state={
-      width:30,
-      height: 10,
+      width:150,
+      height: 80,
       gridStatus: [],
       speed: 2000,
       slow: 3000,
@@ -138,6 +139,7 @@ class App extends Component {
     this.setState({grid: rows});
   }
   updateGrid(event) {
+    console.log(event.type)
     let updatedCell='';
     let targetCol = event.target.dataset.col;
     let targetRow = event.target.dataset.row; 
@@ -173,37 +175,48 @@ class App extends Component {
     this.setState({gridStatus: rows});
   }
   render() {
+    const footerStyle= {
+          position: 'absolute',
+          bottom: '0',
+          width: '100%',
+          height: '60px',
+          lineHeight: '60px',
+          backgroundColor: '#000'
+    }
     return (
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-12">
-            <h1>Game of life. Generation: {this.state.generation}</h1>
-            <table>
-              <tbody>
-                {this.state.grid}
-              </tbody>
-            </table>
+      <div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-12">
+              <h1>Game of life</h1>
+              <table style={{width:'100%', height: '70vh'}}>
+                <tbody>
+                  {this.state.grid}
+                </tbody>
+              </table>
+              <h2>Generation: {this.state.generation}</h2>
+            </div>
           </div>
         </div>
-        <div className="row justify-content-center">
-          <div className="col-md-6">
-          <h3>Speed</h3>
-            <ButtonGroup>
-              <Button active={parseInt(this.state.speed, 10) === this.state.slow ? true : false} data-speed={this.state.slow} onClick={parseInt(this.state.slow, 10) === this.state.medium ? null : this.changeSpeed}>Slow</Button>
-              <Button active={parseInt(this.state.speed, 10) === this.state.medium ? true : false} data-speed={this.state.medium} onClick={parseInt(this.state.speed, 10) === this.state.medium ? null : this.changeSpeed}>Medium</Button>
-              <Button active={parseInt(this.state.speed, 10) === this.state.fast ? true : false} data-speed={this.state.fast} onClick={parseInt(this.state.speed, 10) === this.state.fast ? null : this.changeSpeed}>Fast</Button>
-            </ButtonGroup>
-          </div>
-          <div className="col-md-6">
-            <h3>Board control</h3>
-            <ButtonToolbar>
-              <Button active={this.state.pause} onClick={this.pauseGame}>{this.state.pause? "Play" : "Pause"}</Button>
-              <Button onClick={this.restartGame}>Reset game</Button>
-              <Button onClick={this.clearBoard}>Clear Board</Button>
-            </ButtonToolbar>
-          </div>
+        <footer style={footerStyle}>
+            <div className="col-md-6">
+            <h3>Speed</h3>
+              <ButtonGroup>
+                <Button active={parseInt(this.state.speed, 10) === this.state.slow ? true : false} data-speed={this.state.slow} onClick={parseInt(this.state.slow, 10) === this.state.medium ? null : this.changeSpeed}>Slow</Button>
+                <Button active={parseInt(this.state.speed, 10) === this.state.medium ? true : false} data-speed={this.state.medium} onClick={parseInt(this.state.speed, 10) === this.state.medium ? null : this.changeSpeed}>Medium</Button>
+                <Button active={parseInt(this.state.speed, 10) === this.state.fast ? true : false} data-speed={this.state.fast} onClick={parseInt(this.state.speed, 10) === this.state.fast ? null : this.changeSpeed}>Fast</Button>
+              </ButtonGroup>
+            </div>
+            <div className="col-md-6">
+              <h3>Board control</h3>
+              <ButtonToolbar>
+                <Button active={this.state.pause} onClick={this.pauseGame}>{this.state.pause? "Play" : "Pause"}</Button>
+                <Button onClick={this.restartGame}>Reset game</Button>
+                <Button onClick={this.clearBoard}>Clear Board</Button>
+              </ButtonToolbar>
+            </div>
+          </footer>
         </div>
-      </div>
     );
   }
 }
