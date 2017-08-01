@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
 import './App.css';
-import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonGroup, ButtonToolbar, Popover, OverlayTrigger } from 'react-bootstrap';
 import Cell from './Cell';
 
 class App extends Component {
@@ -183,6 +183,12 @@ class App extends Component {
           lineHeight: '60px',
           backgroundColor: '#000'
     }
+    const popoverClick = (
+      <Popover id="popover-trigger-click" title="About the Game Of Life">
+        <p>This was created as part of the Game of life FreeCodeCamp challenge.</p>
+        <p><a href="https://github.com/sandra-dudley/gameoflife">Checkout the github repo.</a></p>
+      </Popover>
+    );
     return (
       <div>
         <div className="container">
@@ -213,6 +219,9 @@ class App extends Component {
                 <Button active={this.state.pause} onClick={this.pauseGame}>{this.state.pause? "Play" : "Pause"}</Button>
                 <Button onClick={this.restartGame}>Reset game</Button>
                 <Button onClick={this.clearBoard}>Clear Board</Button>
+                <OverlayTrigger trigger="click" placement="top" overlay={popoverClick}>
+                  <Button>About</Button>
+                </OverlayTrigger>
               </ButtonToolbar>
             </div>
           </footer>

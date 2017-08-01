@@ -16,6 +16,7 @@ table td {
     color: #fff;
 }
 
+
 footer h3 {
     display: inline-block;
     margin-right: 10px;
@@ -23,4 +24,8 @@ footer h3 {
 footer .btn-toolbar {
     display: inline-block;
     vertical-align: middle;
+}
+
+.popover-title, .popover-content {
+    color: #000 !important;
 }
